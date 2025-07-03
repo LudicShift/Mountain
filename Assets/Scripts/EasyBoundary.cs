@@ -100,7 +100,21 @@ public class EasyBoundary : MonoBehaviour
             if (node != null && !nodes.Contains(node))
                 nodes.Add(node);
         }
-        nodes.Sort((a, b) => string.Compare(a.name, b.name));
+
+        // 숫자 추출 기반 정렬
+        nodes.Sort((a, b) =>
+        {
+            int aNum = ExtractNumber(a.name);
+            int bNum = ExtractNumber(b.name);
+            return aNum.CompareTo(bNum);
+        });
+    }
+
+    private int ExtractNumber(string name)
+    {
+        // "Node12" -> 12
+        string numberPart = System.Text.RegularExpressions.Regex.Match(name, @"\d+").Value;
+        return int.TryParse(numberPart, out int num) ? num : 0;
     }
 
     public void UpdateColliders()
